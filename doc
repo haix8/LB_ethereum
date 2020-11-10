@@ -1,0 +1,7 @@
+
+安装依赖
+pip3 install flask eventlet gunicorn web3
+
+crontab 中加入
+*/1 * * * * /home/tron-api/sh/moni.sh
+
