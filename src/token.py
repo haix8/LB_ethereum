@@ -2,7 +2,9 @@
 # -*- encoding: utf-8 -*-
 # Time: 2020/11/8 3:37 下午
 # Author: K
+import requests
 
+from config.cfg import blockUrl
 from util.ctt import getContract, getW3, to0x, getAccount
 
 
@@ -32,7 +34,6 @@ def decimals(cttAddr):
 
 # Token余额
 def token_balance(cttAddr, address):
-
     address = to0x(address)
     cttAddr = to0x(cttAddr)
 
@@ -86,3 +87,14 @@ def token_tranfer(cttAddr, pvkey, toAddr, tokenAmt, gasLimit=None, gasPrice=None
         # print('TOKEN 交易哈希 ', hash_tx)
         return hash_tx
     return None
+
+
+# Token交易记录
+def token_transList(cttAddr, num=10):
+    url = '{}/api/contract_orderList?page=1&nums={}&str={}'.format(blockUrl, num, to0x(cttAddr))
+    response = requests.get(url)
+    if response.status_code != 200:
+        return None
+
+    data = response.json()
+    return data['data'], data['nums']

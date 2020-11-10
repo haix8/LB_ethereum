@@ -2,6 +2,7 @@ httpPvi = 'http://47.242.166.5:18888'
 # cttAddr = '0xF318e5Fd9a918fCde0663b7ba684898f67222926'
 FC = '0xb6c1b8ea6ad63e6f23aecefbdb1576bfb73bd484'
 BEC = '0x8204b4286218ef8a72013a6b1621d49a49fc631c'
+blockUrl = 'http://47.52.110.153:8080'
 
 ABI = [
     {

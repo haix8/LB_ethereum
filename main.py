@@ -8,7 +8,7 @@ from flask import (
 )
 
 from src.lb import newAccount, lb_balance, lb_tranfer, getLbGas, getTransByHash
-from src.token import token_balance, token_tranfer, symbol, decimals
+from src.token import token_balance, token_tranfer, symbol, decimals, token_transList
 from util.ctt import getW3
 
 app = Flask(__name__)
@@ -191,7 +191,23 @@ def getTransaction(txn_id):
         })
 
 
-# http://47.52.110.153:8080/api/contract_orderList?page=1&nums=50&str=0xf318e5fd9a918fcde0663b7ba684898f67222926
+@app.route('/api/getTransList/<string:cttAddr>', methods=["GET"])
+def getTransList(cttAddr):
+    try:
+        data, nums = token_transList(cttAddr)
+        tokenDecimals = decimals(cttAddr)
+        return jsonify({
+            "data": {'list': data, 'nums': nums, 'decimals': tokenDecimals},
+            "code": 200,
+            "msg": "交易记录查询成功"
+        })
+    except Exception as e:
+        return jsonify({
+            "data": None,
+            "code": 500,
+            "msg": str(e)
+        })
+
 
 if __name__ == "__main__":
     app.run()

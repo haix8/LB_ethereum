@@ -172,3 +172,46 @@
 
 
 
+
+
+
+### 代币余额查询
+
+#### Request
+
+- Method: **GET**
+- URL:  ```api/getTransList/{cttAddr}```
+
+#### Response
+
+- Body
+
+```json
+{
+    "code": 200,
+    "data": {
+        "decimals": 18,
+        "list": [
+            {
+                "Id": "0",
+                "address": "0xB6C1B8eA6aD63E6f23AecefbDB1576Bfb73Bd484",
+                "block_number": "751195",
+                "data": "0xa9059cbb000000000000000000000000c0ddbeaa042ad8dd8b0c85cdbbc22320dc2779cf000000000000000000000000000000000000000000084595161401484a000000",
+                "from": "0x2A860b2Ac175C2905502eEAd1A0EAbDa3d5141Ef",
+                "gas": "52546",
+                "gas_price": "180000000",
+                "hash": "0xea3db568c437ff5a6aed6c2820e30c330d4efa46375b12f3584170633a6c41fb",
+                "nonce": "108",
+                "time": "1604989233",
+                "to": "0xc0ddbeaa042ad8dd8b0c85cdbbc22320dc2779cf",
+                "value": "10000000000000000000000000"
+            }
+        ],
+        "nums": 1
+    },
+    "msg": "交易记录查询成功"
+}
+```
+
+
+
