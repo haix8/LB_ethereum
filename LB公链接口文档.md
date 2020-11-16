@@ -175,12 +175,12 @@
 
 
 
-### 代币余额查询
+### 交易记录查询
 
 #### Request
 
 - Method: **GET**
-- URL:  ```api/getTransList/{cttAddr}```
+- URL:  ```api/getTransList/{cttAddr}/{limit}```
 
 #### Response
 

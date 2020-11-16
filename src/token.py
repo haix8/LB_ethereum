@@ -91,6 +91,7 @@ def token_tranfer(cttAddr, pvkey, toAddr, tokenAmt, gasLimit=None, gasPrice=None
 
 # Token交易记录
 def token_transList(cttAddr, num=10):
+
     url = '{}/api/contract_orderList?page=1&nums={}&str={}'.format(blockUrl, num, to0x(cttAddr))
     response = requests.get(url)
     if response.status_code != 200:

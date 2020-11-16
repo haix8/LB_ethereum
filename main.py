@@ -7,9 +7,14 @@ from flask import (
     Flask, jsonify, abort, make_response, request
 )
 
+from config.logConfig import logconfig
 from src.lb import newAccount, lb_balance, lb_tranfer, getLbGas, getTransByHash
 from src.token import token_balance, token_tranfer, symbol, decimals, token_transList
 from util.ctt import getW3
+
+import logging.config
+logging.config.dictConfig(logconfig)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -43,6 +48,7 @@ def balance(address):
         balance_sun = _balance / 1e18
 
     except Exception as e:
+        logger.debug('balance 查询失败：%s' % (e))
         return jsonify({
             "data": None,
             "code": 500,
@@ -71,6 +77,7 @@ def balanceOf(address, cttAddr):
         balance_sun = balance_raw / pow(10, tokenDecimals)
 
     except Exception as e:
+        logger.debug('balanceOf 查询失败：%s' % (e))
         return jsonify({
             "data": None,
             "code": 500,
@@ -108,13 +115,17 @@ def transferToken():
             raise Exception('转账金额需大于0')
 
         _txn = token_tranfer(cttAddr, _privKey, _to, _amount, _gasLimit, _gasPrice)
-        print(_txn)
+        # print(_txn)
         return jsonify({
             "data": _txn,
             "code": 200,
             "msg": "TOKEN交易成功"
         })
     except Exception as e:
+        param = {'cttAddr': cttAddr, '_privKey': _privKey, '_to': _to, '_amount': _amount, '_gasLimit': _gasLimit,
+                 '_gasPrice': _gasPrice}
+        logger.debug('transferToken 交易参数：%s' % param)
+        logger.debug('transferToken 交易失败：%s' % (e))
         return jsonify({
             "data": None,
             "code": 500,
@@ -146,6 +157,9 @@ def transfer():
             "msg": "LB交易成功"
         })
     except Exception as e:
+        param = {'_privKey': _privKey, '_to': _to, '_amount': _amount, '_gasLimit': _gasLimit, '_gasPrice': _gasPrice}
+        logger.debug('transfer 交易参数：%s' % param)
+        logger.debug('transfer 交易失败：%s' % (e))
         return jsonify({
             "data": None,
             "code": 500,
@@ -184,6 +198,7 @@ def getTransaction(txn_id):
             "msg": "交易查询成功"
         })
     except Exception as e:
+        # return e
         return jsonify({
             "data": None,
             "code": 500,
@@ -191,10 +206,10 @@ def getTransaction(txn_id):
         })
 
 
-@app.route('/api/getTransList/<string:cttAddr>', methods=["GET"])
-def getTransList(cttAddr):
+@app.route('/api/getTransList/<string:cttAddr>/<int:limit>', methods=["GET"])
+def getTransList(cttAddr, limit):
     try:
-        data, nums = token_transList(cttAddr)
+        data, nums = token_transList(cttAddr, limit)
         tokenDecimals = decimals(cttAddr)
         return jsonify({
             "data": {'list': data, 'nums': nums, 'decimals': tokenDecimals},
